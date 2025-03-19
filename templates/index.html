@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            background: linear-gradient(to right, #8E2DE2, #FF7F50); /* Gradient background */
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+        }
+
+         /* Navigation Bar */
+        .navbar {
+            background-color: #131313;
+            padding: 15px;
+            font-size: 24px;
+            color: #fff;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 28px;
+            background-image: linear-gradient(45deg, #ff0066, #ffcc00, #0099ff, #ff66cc);
+            background-size: 400%;
+            -webkit-background-clip: text;
+            color: transparent;
+            transition: background-position 1s ease, color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-position: right center;
+            color: #fff; /* Ensure text color changes when hovered */
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar-links a {
+            font-size: 20px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-top: 40px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        h1:hover {
+            transform: scale(1.1); /* Grow the heading slightly when hovered */
+        }
+
+        /* Form Container */
+        .form-container {
+            margin: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        input, button {
+            padding: 15px;
+            font-size: 16px;
+            margin: 15px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            outline: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="text"] {
+            width: 320px;
+            font-size: 18px;
+        }
+
+        /* Square Color Input Styles */
+        input[type="color"] {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px; /* Square shape with rounded corners */
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        input[type="color"]:focus {
+            outline: none;
+        }
+
+        input[type="color"]:hover {
+            transform: scale(1.1); /* Slight zoom effect */
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+            transform: scale(1.1); /* 3D button hover effect */
+        }
+
+        /* QR Code Box */
+        .qr-code-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        .qr-code-box {
+            width: 300px;
+            height: 300px;
+            display: inline-block;
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin-top: 20px;
+            text-align: center;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .qr-code {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* Download Button */
+        .download-button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        
+            text-decoration: none; /* Ensures no underline on hover/focus */
+            
+        }
+
+        .download-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        .download-button:active {
+            transform: scale(1);
+        }
+
+        .download-button:focus {
+            outline: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #131313;
+            color: #d1d5db;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #4fd1c5;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Made By Section */
+        .made-by {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .social-icons a {
+            color: #fff;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.2); /* Grow the icons when hovered */
+        }
+
+        /* Animation for fading in the QR code */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="#">QRyCODEx</a>
+        <div class="navbar-links">
+            <a href="{{ url_for('home') }}">Home</a>  <!-- Home Button -->
+            <a href="{{ url_for('about') }}">About</a> <!-- About Button -->
+        </div>
+    </div>
+
+    <h1>Generate Your QR Code</h1>
+
+    <form method="POST" action="/">
+
+        <div class="form-container">
+            <label for="url">Enter URL:</label>
+            <input type="text" id="url" name="url" placeholder="Enter the URL" required>
+        </div>
+
+        <div class="form-container">
+            <label for="fill_color">Select QR Code Color:</label>
+            <input type="color" id="fill_color" name="fill_color" value="#FF0000" onchange="updateColorBox('fill_color')">
+        </div>
+
+        <div class="form-container">
+            <label for="back_color">Select Background Color:</label>
+            <input type="color" id="back_color" name="back_color" value="#FFFFFF" onchange="updateColorBox('back_color')">
+        </div>
+
+        <button type="submit">Generate QR Code</button>
+
+    </form>
+
+    <div class="qr-code-container">
+        {% if qr_code_url %}
+            <h3>Your Generated QR Code:</h3>
+            <div class="qr-code-box">
+                <img class="qr-code" src="{{ qr_code_url }}" alt="QR Code">
+            </div>
+            <a href="{{ download_url }}" class="download-button" download>Download QR Code</a>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>Powered by <a href="#"style="color: yellow; text-decoration: none;">QRyCODEx</a></p>
+        <p>For more information, <a href="{{ url_for('about') }}"style="color: yellow; text-decoration: none;" target="_blank">Project Details</a></p>
+        <p>Contact: <a href="mailto:moulalishaikh91@gmail.com"style="color: yellow; text-decoration: none;">moulalishaikh91@gmail.com</a></p>
+        <p>&copy; 2025 QRyCODEx. All Rights Reserved.</p>
+        <p class="made-by">Made by <a href="#"style="color: yellow; text-decoration: none;">Ali Shaikh</a></p>
+        
+        <div class="social-icons">
+            <a href="https://www.instagram.com/#" target="_blank" title="Instagram">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" style="width: 30px; height: 30px;">
+            </a>
+            <a href="https://www.facebook.com/#" target="_blank" title="Facebook">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" style="width: 30px; height: 30px;">
+            </a>
+            <a href="https://www.youtube.com/@alitech68/" target="_blank" title="YouTube">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" style="width: 30px; height: 30px;">
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        function updateColorBox(colorId) {
+            var colorValue = document.getElementById(colorId).value;
+            var colorPicker = document.getElementById(colorId);
+            
+            // Update the color picker background to the selected color
+            colorPicker.style.backgroundColor = colorValue;
+            
+            // Remove the border of the color input field
+            colorPicker.style.border = "none";
+        }
+    </script>
+
+</body>
+</html>
